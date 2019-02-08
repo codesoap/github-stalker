@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+from bs4 import BeautifulSoup
+import sys
+import urllib.request
+
+
+def main():
+	for username in sys.stdin:
+		url = "https://github.com/{}".format(username)
+		html = urllib.request.urlopen(url).read()
+		soup = BeautifulSoup(html, "html.parser")
+		print_organizations(soup)
+
+
+def print_organizations(soup):
+	organizations_container = soup('h2', text='Organizations')
+	if len(organizations_container) == 1:	
+		organizations = organizations_container[0].find_parent().find_all('a')
+		for organization in organizations:
+			print(organization['href'][1:])
+
+
+if __name__ == '__main__':
+	main()
