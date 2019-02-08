@@ -16,7 +16,7 @@ def main():
 def print_organization_if_matches_filter(soup, organization):
 	tabs = soup('a', class_='pagehead-tabs-item')
 	people_tab = list(filter(lambda tab: "People" in tab.text, tabs))[0]
-	people_count = int(people_tab.find('span').text)
+	people_count = int(people_tab.find('span').text.replace(",", ""))
 	if people_count > 3:
 		print(organization.strip())
 
