@@ -10,15 +10,16 @@ def main():
 		url = "https://github.com/{}".format(username)
 		html = urllib.request.urlopen(url).read()
 		soup = BeautifulSoup(html, "html.parser")
-		print_organizations(soup)
+		print_organizations(soup, username)
 
 
-def print_organizations(soup):
+def print_organizations(soup, username):
 	organizations_container = soup('h2', text='Organizations')
 	if len(organizations_container) == 1:	
 		organizations = organizations_container[0].find_parent().find_all('a')
 		for organization in organizations:
-			print(organization['href'][1:])
+			organization_name = organization['href'][1:]
+			print("{} ({})".format(organization_name, username.strip()))
 
 
 if __name__ == '__main__':
