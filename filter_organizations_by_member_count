@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+from bs4 import BeautifulSoup
+import sys
+import urllib.request
+
+
+def main():
+	for organization in sys.stdin:
+		url = "https://github.com/{}".format(organization)
+		html = urllib.request.urlopen(url).read()
+		soup = BeautifulSoup(html, "html.parser")
+		print_organization_if_matches_filter(soup, organization)
+
+
+def print_organization_if_matches_filter(soup, organization):
+	tabs = soup('a', class_='pagehead-tabs-item')
+	people_tab = list(filter(lambda tab: "People" in tab.text, tabs))[0]
+	people_count = int(people_tab.find('span').text)
+	if people_count > 3:
+		print(organization.strip())
+
+
+if __name__ == '__main__':
+	main()
